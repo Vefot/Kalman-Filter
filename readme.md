@@ -1,6 +1,7 @@
-# Python Kalman Filter Implementation
+# Kalman Filter
+One dimensional kalman filter in several languages
 
-Goal: Estimate X, Y position of a moving object using a Kalman Filter
+Goal: Estimate X position of a moving object using a Kalman Filter
 
 ## Overview
 
