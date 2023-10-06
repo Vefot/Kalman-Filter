@@ -26,8 +26,8 @@ for step in range(NUM_STEPS):
     if step > 500:
         real_v *= 0.9
 
-    mus.append(kf.mean)
     covs.append(kf.covariance)
+    mus.append(kf.mean)
 
     # update the position - simulate in this manner:
     real_x = real_x + DT * real_v
