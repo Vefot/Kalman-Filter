@@ -70,14 +70,14 @@ class KF:
 
         y = z - H.dot(self._x)
         S = H.dot(self._P).dot(H.T) + R
-        
+
         K = self._P.dot(H.T).dot(np.linalg.inv(S))
 
         new_x = self._x + K.dot(y)
         new_p = (np.eye(2) - K.dot(H)).dot(self._P)
 
         self._P = new_p
-        self._x - new_x
+        self._x = new_x
 
     @property
     def covariance(self) -> np.array:
