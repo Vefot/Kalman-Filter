@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 type KalmanFilter struct {
 	xEstimate float64 // Estimated state (position)
