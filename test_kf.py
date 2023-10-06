@@ -1,4 +1,5 @@
 from unittest import TestCase
+import numpy as np
 from kf import KF
 
 
@@ -29,3 +30,38 @@ class TestKF(TestCase):
 
         # the state vector should be 2x1
         self.assertEqual(kf.mean.shape, (2,))
+
+    def test_calling_predict_increases_state_uncertainty(self):
+        """
+        Uncertainty in the state should increase with time,
+        so P should be larger after calling predict
+        """
+        x = 0.2
+        v = 2.3
+        kf = KF(initial_x=x, initial_v=v, accel_variance=1.2)
+
+        for i in range(10):
+            # det is the determinant of the covariance matrix (a measure of uncertainty in the state)
+            det_before = np.linalg.det(kf.covariance)
+            kf.predict(dt=0.1)
+            det_after = np.linalg.det(kf.covariance)
+
+            self.assertGreater(det_after, det_before)
+            print(det_before, det_after)
+
+    def test_calling_update_decreases_state_uncertainty(self):
+        """
+        Calling update should decrease uncertainty in the state
+        because we are getting new information about the state
+        from e.g. a sensor measurement
+        """
+        x = 0.2
+        v = 2.3
+
+        kf = KF(initial_x=x, initial_v=v, accel_variance=1.2)
+
+        det_before = np.linalg.det(kf.covariance)
+        kf.update(measurement_value=0.1, measurement_variance=0.01)
+        det_after = np.linalg.det(kf.covariance)
+
+        self.assertLess(det_after, det_before)

@@ -3,10 +3,13 @@ import numpy as np
 
 class KF:
     """
+    One dimensional Kalman filter
+
     Instantiates with the following properties:
 
     initial_x: initial location
     initial_v: initial velocity
+    accel_variance: variance in acceleration
     """
 
     def __init__(
@@ -40,6 +43,28 @@ class KF:
 
         self._P = new_P
         self._x = new_x
+
+    def update(self, measurement_value: float, measurement_variance: float):
+        # y = z - H x
+        # S = H P Ht + R
+        # K = P Ht S^-1
+        # x = x + K y
+        # P = (I - K H) * P
+        
+        H = np.array([1,0]).reshape((1,2))
+        
+        z = np.array([measurement_value])
+        R = np.array([measurement_variance])
+
+        y = z - H.dot(self._x)
+        S = H.dot(self._P).dot(H.T) + R
+        K = self._P.dot(H.T).dot(np.linalg.inv(S))
+
+        new_x = self._x + K.dot(y)
+        new_p = (np.eye(2) - K.dot(H)).dot(self._P)
+
+        self._x - new_x
+        self._P = new_p
 
     @property
     def covariance(self) -> np.ndarray:
