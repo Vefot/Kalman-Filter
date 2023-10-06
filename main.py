@@ -22,6 +22,10 @@ real_xs = []
 real_vs = []
 
 for step in range(NUM_STEPS):
+    # change the speed after step 500..
+    if step > 500:
+        real_v *= 0.9
+
     mus.append(kf.mean)
     covs.append(kf.covariance)
 
